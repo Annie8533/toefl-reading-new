@@ -1,3 +1,4 @@
+/** Design philosophy: 溫暖紙本工作檯、墨藍資訊欄、橘朱校對線；全站維持單一聚焦的段落練習流程。 */
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
