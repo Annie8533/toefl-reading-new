@@ -16,3 +16,6 @@
 
 /* Fill-word composition: prefix and completion always travel together at a line break. */
 .signal-word{display:inline-flex;align-items:baseline;white-space:nowrap;vertical-align:baseline}.word-prefix{display:inline-block;white-space:nowrap}.signal-gap-wrap{display:inline-flex;position:relative;flex:0 0 auto;white-space:nowrap}.signal-gap{flex:0 0 auto}.signal-gap.is-caps{text-transform:uppercase}
+
+/* The answer must visually continue the shown prefix, not look like a separate UI control. */
+.signal-gap{height:1.16em;margin:0 1px;padding:0 2px 1px;border-radius:0;font-family:inherit;font-size:1em;font-weight:inherit;font-style:inherit;line-height:1.16;letter-spacing:inherit;vertical-align:baseline;color:inherit;appearance:none;-webkit-appearance:none}.signal-gap-wrap{align-items:baseline;line-height:inherit}.word-prefix{font:inherit;line-height:inherit}
