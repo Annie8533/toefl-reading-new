@@ -234,7 +234,7 @@
 
 ## Vercel 靜態前端部署修正
 
-- [ ] 檢查 Vercel 目前將 `server/index.ts` 作為部署輸出的原因。
-- [ ] 建立 `vercel.json`，將 Vercel 建置設定為 Vite 靜態前端並將輸出導向 `dist/public`。
-- [ ] 確保根路徑與單頁應用路由皆回傳前端 `index.html`，不會曝光伺服器原始碼。
-- [ ] 推送設定修正至 GitHub，等待 Vercel 自動重新部署並實際驗證 `toefl-reading-new.vercel.app`。
+- [x] 檢查 Vercel 目前將 `server/index.ts` 作為部署輸出的原因。
+- [x] 建立 `vercel.json`，將 Vercel 建置設定為 Vite 靜態前端並將輸出導向 `dist/public`。
+- [x] 確保根路徑與單頁應用路由皆回傳前端 `index.html`，不會曝光伺服器原始碼。
+- [x] 推送設定修正至 GitHub，等待 Vercel 自動重新部署並實際驗證 `toefl-reading-new.vercel.app`。
