@@ -51,6 +51,7 @@ const makeRound = (progress: StoredProgress, seed: number) => {
   return [...priority, ...rest].slice(0, 10).map(id => byId.get(id)!).filter(Boolean);
 };
 const normalized = (value: string, answer: string, length: number) => { const letters = value.replace(/[^a-zA-Z]/g, "").slice(0, length); return answer === answer.toUpperCase() ? letters.toUpperCase() : letters.toLowerCase(); };
+const normalizedExamAnswer = (value: string, answer: string) => { const letters = value.replace(/[^a-zA-Z]/g, ""); return answer === answer.toUpperCase() ? letters.toUpperCase() : letters.toLowerCase(); };
 
 function SignalMark() { return <span className="brand-mark" aria-label="TOEFL WORD LAB signal gap-grid mark"><img src="/manus-storage/cobalt-signal-mark_eba43549.png" alt=""/><i/><i/><i/></span>; }
 
@@ -83,7 +84,7 @@ export default function Home() {
   const examScore = Object.values(results).reduce((total, item) => total + item.score, 0);
 
   const newRound = () => { const next = seed + 1; setSeed(next); setMode("exam"); setScreen("questions"); setSession(makeRound(progress, next)); setActive(0); setAnswers({}); setResults({}); setReviewItems([]); setReviewActive(0); setReviewDraft({}); setReviewResults({}); setReviewLetterAlert(""); setRoundCounted(false); };
-  const updateAnswer = (number: number, value: string, gap: Gap) => { if (!task || taskResult) return; setAnswers(previous => ({ ...previous, [task.task_id]: { ...previous[task.task_id], [number]: normalized(value, gap.answer, gap.expected.length) } })); };
+  const updateAnswer = (number: number, value: string, gap: Gap) => { if (!task || taskResult) return; setAnswers(previous => ({ ...previous, [task.task_id]: { ...previous[task.task_id], [number]: normalizedExamAnswer(value, gap.answer) } })); };
   const gradeTask = () => {
     if (!task || taskResult) return;
     const correct: Record<number, boolean> = {}; const submitted: Record<number, string> = {};
@@ -133,7 +134,7 @@ export default function Home() {
   const nextReview = () => { if (reviewActive < reviewItems.length - 1) { setReviewActive(index => index + 1); setReviewLetterAlert(""); return; } setMode("exam"); setReviewItems([]); setReviewActive(0); setReviewDraft({}); setReviewResults({}); setReviewLetterAlert(""); advanceExamPassage(); };
   const renderPassage = (): ReactNode[] => {
     if (!task) return []; const pieces = task.gapped_passage.split(/(_+)/g); const nodes: ReactNode[] = []; let gapIndex = 0;
-    for (let index = 0; index < pieces.length; index += 1) { const piece = pieces[index]; const nextGap = /^_+$/.test(pieces[index + 1] ?? ""); if (/^_+$/.test(piece)) continue; if (nextGap) { const split = piece.match(/^(.*?)([A-Za-z]+)$/); const gap = gaps[gapIndex++]; if (split && gap) { const [, before, prefix] = split; if (before) nodes.push(<span key={`text-${index}`}>{before}</span>); const state = taskResult ? (taskResult.correct[gap.number] ? "ok" : "no") : ""; nodes.push(<span className="signal-word" key={`gap-${gap.number}`}><span className="word-prefix">{prefix}</span><span className="signal-gap-wrap"><input value={current[gap.number] ?? ""} maxLength={gap.expected.length} spellCheck={false} autoCapitalize="none" disabled={Boolean(taskResult)} onChange={event => updateAnswer(gap.number, event.target.value, gap)} onKeyDown={event => { if (event.key === "Enter") taskResult ? continueAfterExam() : gradeTask(); }} style={{ width: `${Math.max(34, gap.expected.length * 13 + 18)}px` }} className={`signal-gap ${state} ${gap.answer === gap.answer.toUpperCase() ? "is-caps" : ""}`} aria-label={`第 ${gap.number} 空，字首 ${prefix}`}/>{taskResult && !taskResult.correct[gap.number] && <span className="correction">{gap.expected}</span>}</span></span>); index += 1; continue; } } nodes.push(<span key={`text-${index}`}>{piece}</span>); }
+    for (let index = 0; index < pieces.length; index += 1) { const piece = pieces[index]; const nextGap = /^_+$/.test(pieces[index + 1] ?? ""); if (/^_+$/.test(piece)) continue; if (nextGap) { const split = piece.match(/^(.*?)([A-Za-z]+)$/); const gap = gaps[gapIndex++]; if (split && gap) { const [, before, prefix] = split; if (before) nodes.push(<span key={`text-${index}`}>{before}</span>); const state = taskResult ? (taskResult.correct[gap.number] ? "ok" : "no") : ""; nodes.push(<span className="signal-word" key={`gap-${gap.number}`}><span className="word-prefix">{prefix}</span><span className="signal-gap-wrap"><input value={current[gap.number] ?? ""} spellCheck={false} autoCapitalize="none" disabled={Boolean(taskResult)} onChange={event => updateAnswer(gap.number, event.target.value, gap)} onKeyDown={event => { if (event.key === "Enter") taskResult ? continueAfterExam() : gradeTask(); }} style={{ width: "4.25em" }} className={`signal-gap exam-gap ${state} ${gap.answer === gap.answer.toUpperCase() ? "is-caps" : ""}`} aria-label={`第 ${gap.number} 空，字首 ${prefix}`}/>{taskResult && !taskResult.correct[gap.number] && <span className="correction">{gap.expected}</span>}</span></span>); index += 1; continue; } } nodes.push(<span key={`text-${index}`}>{piece}</span>); }
     return nodes;
   };
 
