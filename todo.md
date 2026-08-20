@@ -231,3 +231,10 @@
 - [x] 將目前完整題庫保留為純前端靜態資料，並清除 Firebase 動態讀取與授權介面的未完成規劃。
 - [x] 為 `Annie8533/toefl-reading-new` 建立 GitHub Pages Actions 工作流程與正確 Vite 基底路徑。
 - [ ] 推送全部程式碼到 `main`，啟用 GitHub Pages，並實際驗證公開網址與兩種解鎖流程。
+
+## Vercel 靜態前端部署修正
+
+- [ ] 檢查 Vercel 目前將 `server/index.ts` 作為部署輸出的原因。
+- [ ] 建立 `vercel.json`，將 Vercel 建置設定為 Vite 靜態前端並將輸出導向 `dist/public`。
+- [ ] 確保根路徑與單頁應用路由皆回傳前端 `index.html`，不會曝光伺服器原始碼。
+- [ ] 推送設定修正至 GitHub，等待 Vercel 自動重新部署並實際驗證 `toefl-reading-new.vercel.app`。

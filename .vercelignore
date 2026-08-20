@@ -1,0 +1,7 @@
+server/
+.manus-logs/
+dist/
+docs/
+terminal_full_output/
+screenshots/
+page_texts/
