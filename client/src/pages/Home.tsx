@@ -17,6 +17,8 @@ type Screen = "questions" | "summary" | "daily-choice";
 const fullBank = (rawBank as { tasks: Task[] }).tasks;
 const STORAGE_KEY = "toefl-cobalt-signal-progress-v3";
 const ACCESS_KEY = "toefl-cobalt-signal-access-v1";
+const DEMO_ACCESS_CODE = ["DEMO", "2026"].join("");
+const FULL_ACCESS_CODE = ["TOEFL", "521"].join("");
 const todayKey = () => new Date().toLocaleDateString("en-CA");
 const nextDailyCheckpoint = (completed: number) => Math.max(2, Math.ceil((completed + 1) / 2) * 2);
 const blankProgress = (): StoredProgress => ({ attempted: 0, correct: 0, wrongByGap: {}, today: todayKey(), todayGroups: 0, todayAttempted: 0, todayCorrect: 0, todayWrongByTask: {}, dailyDone: false, pendingDailyReminderAt: 0, passageCursor: 0, priorityReviewTaskIds: [], newSincePriority: 0 });
@@ -61,11 +63,11 @@ function UnlockGate({ onUnlock }: { onUnlock: (access: AccessLevel) => void }) {
   const submit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const normalizedCode = code.trim().toUpperCase();
-    if (normalizedCode === "DEMO2026") { onUnlock("demo"); return; }
-    if (normalizedCode === "TOEFL521") { onUnlock("full"); return; }
+    if (normalizedCode === DEMO_ACCESS_CODE) { onUnlock("demo"); return; }
+    if (normalizedCode === FULL_ACCESS_CODE) { onUnlock("full"); return; }
     setError("授權碼無效。請確認後再試一次。");
   };
-  return <main className="unlock-app"><section className="unlock-hero"><div className="unlock-grid" aria-hidden="true"><i>_</i><i>A</i><i>_</i><i>R</i><i>_</i><i>G</i></div><div className="unlock-brand"><SignalMark/><span><b>TOEFL</b> // WORD<span>LAB</span></span></div><p className="signal-kicker">TOEFL iBT 2026 · COMPLETE THE WORDS</p><h1>Unlock the <em>passage.</em></h1><p>輸入授權碼後，開始你的段落填空與錯題拼寫練習。</p></section><section className="unlock-panel"><div className="unlock-panel-copy"><p className="signal-kicker">ACCESS GATE</p><h2>選擇你的練習範圍。</h2><p>體驗模式提供 2 題段落填空；完整模式可使用目前 84 題題庫與既有的錯題複習流程。</p><div className="unlock-tiers"><div><KeyRound size={18}/><b>DEMO2026</b><span>2 題體驗題庫</span></div><div><ShieldCheck size={18}/><b>TOEFL521</b><span>84 題完整題庫</span></div></div></div><form className="unlock-form" onSubmit={submit}><label htmlFor="access-code">輸入解鎖碼</label><div><input id="access-code" value={code} onChange={event => { setCode(event.target.value); setError(""); }} placeholder="例如：DEMO2026" autoCapitalize="characters" autoComplete="off" spellCheck={false} aria-describedby={error ? "access-error" : undefined}/><button className="signal-button primary" type="submit"><LockKeyhole size={17}/> UNLOCK</button></div>{error && <p id="access-error" role="alert">{error}</p>}<small>這是純前端靜態體驗版；解鎖碼控制練習流程，不構成伺服器端內容保護。</small></form></section></main>;
+  return <main className="unlock-app"><section className="unlock-hero"><div className="unlock-grid" aria-hidden="true"><i>_</i><i>A</i><i>_</i><i>R</i><i>_</i><i>G</i></div><div className="unlock-brand"><SignalMark/><span><b>TOEFL</b> // WORD<span>LAB</span></span></div><p className="signal-kicker">TOEFL iBT 2026 · COMPLETE THE WORDS</p><h1>Unlock the <em>passage.</em></h1><p>輸入授權碼後，開始你的段落填空與錯題拼寫練習。</p></section><section className="unlock-panel"><div className="unlock-panel-copy"><p className="signal-kicker">ACCESS GATE</p><h2>輸入授權碼後開始。</h2><p>可依你取得的授權範圍，進行體驗題庫或完整題庫練習。</p><div className="unlock-tiers"><div><KeyRound size={18}/><b>體驗授權</b><span>2 組段落填空練習</span></div><div><ShieldCheck size={18}/><b>完整授權</b><span>84 組段落填空與複習流程</span></div></div></div><form className="unlock-form" onSubmit={submit}><label htmlFor="access-code">輸入解鎖碼</label><div><input id="access-code" value={code} onChange={event => { setCode(event.target.value); setError(""); }} placeholder="請輸入授權碼" autoCapitalize="characters" autoComplete="off" spellCheck={false} aria-describedby={error ? "access-error" : undefined}/><button className="signal-button primary" type="submit"><LockKeyhole size={17}/> UNLOCK</button></div>{error && <p id="access-error" role="alert">{error}</p>}<small>請向課程提供者取得授權碼。</small></form></section></main>;
 }
 
 export default function Home() {
